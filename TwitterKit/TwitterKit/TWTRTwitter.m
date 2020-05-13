@@ -357,16 +357,11 @@ static TWTRTwitter *sharedTwitter;
         __strong typeof(weakViewController) strongViewController = weakViewController;
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
         [strongViewController presentViewController:navigationController animated:YES completion:nil];
-    }
-        completion:^(TWTRSession *session, NSError *error) {
-            /**
-                Grab the top view controller here since the top most view controller should be the
-                web view controller at this point in the login cycle otherwise this would dismiss
-                the view controller below it.
-             */
-            [[TWTRUtils topViewController] dismissViewControllerAnimated:YES completion:nil];
-            completion(session, error);
-        }];
+    } completion:^(TWTRSession *session, NSError *error) {
+        __strong typeof(weakViewController) strongViewController = weakViewController;
+        [strongViewController dismissViewControllerAnimated:YES completion:nil];
+        completion(session, error);
+    }];
 }
 
 - (BOOL)shouldShowWebBasedLogin:(NSError *)error
